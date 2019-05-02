@@ -9,6 +9,8 @@ import java.util.ArrayList;
 
 public class Ventana extends JFrame{
 
+    private String original;
+
     private ArrayList<String> stack;
 
     private JTextField textField1 = new JTextField();
@@ -34,10 +36,8 @@ public class Ventana extends JFrame{
             button.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    push(textField1.getText());
-                    palindrome();
-                    pack();
-                    pop();
+                    original = textField1.getText().toLowerCase().replaceAll("\\s+","");
+                    result.setText(palindrome());
                 }
             });
 
@@ -51,39 +51,33 @@ public class Ventana extends JFrame{
 
         }
 
-    public void push(String x) {
-        stack.add(x);
-    }
 
-    public String pop(){
-        return stack.remove(stack.size()-1);
-    }
+    private String palindrome(){
 
-    public boolean find(String x) {
-        return stack.contains(x);
+        Stack stack = new Stack();
 
-    }
-
-    @Override
-    public String toString() {
-        return stack.toString();
-    }
-
-
-    private void palindrome(){
-            String original = textField1.getText();
-            String reverse = "";
-
-            int length = original.length();
-
-
-            for (int i = length - 1; i >= 0; i--)
-                reverse = reverse + original.charAt(i);
-
-            if (original.equals(reverse))
-                result.setText("The string is a palindrome.");
-            else
-                result.setText("The string isn't a palindrome.");
+        for (int i = 0; i < original.length(); i++) {
+            stack.push(original.charAt(i));
         }
+
+        String inverted = "";
+
+        while (!stack.isEmpty()) {
+            try {
+                inverted = inverted + stack.pop();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+
+        System.out.println(original);
+        System.out.println(inverted);
+        if (original.equals(inverted)) {
+            return "It's a palindrome";
+        } else {
+            return "It's not a palindrome";
+        }
+    }
+
 }
 
